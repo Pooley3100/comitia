@@ -1,0 +1,31 @@
+entity-relationship-diagram
+
+title PostgreSQL Server for Questions, Polls, and Responses
+
+// define tables
+questions [icon: help-circle, color: green]{
+  id string pk
+  text string
+  pollId string
+  responseId string
+  public boolean
+  url string
+}
+
+polls [icon: list, color: blue]{
+  id string pk
+  questionId string fk
+  option string
+  clickCount int
+}
+
+responses [icon: message-circle, color: orange]{
+  id string pk
+  questionId string fk
+  responseText string
+}
+
+// define relationships
+questions.pollId > polls.id
+questions.responseId > responses.id
+

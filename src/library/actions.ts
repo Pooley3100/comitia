@@ -1,13 +1,19 @@
 'use server'
 import { UserSchema, FormData } from "@/library/types";
+import {createForum} from "@/library/backend"
 
-export async function submitQA(data : FormData){
+type ResponseType = {
+    errors: { [k: string]: string} ; url: string; successPrisma: boolean
+}
+
+export async function submitQA(data : FormData) : Promise<ResponseType> {
     //const body = data.entries();
     const result = UserSchema.safeParse(data);
 
     // Check if the validation is successful
   if (result.success) {
-    return ({ success: true });
+    const resultCreate = await createForum(result)
+    return { errors: {}, ...resultCreate };
   }
 
   // If validation errors, map them into an object
@@ -16,5 +22,5 @@ export async function submitQA(data : FormData){
   );
 
   // Respond with a JSON object containing the validation errors
-  return ({ errors: serverErrors });
+  return ({ errors: serverErrors, url: "", successPrisma: false });
 }

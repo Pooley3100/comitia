@@ -15,7 +15,9 @@ const QAndA = () => {
     const onSubmit = async (data: FormData) => {
         console.log("SUCCESS CLIENT SIDE", data);
         try {
-            const { errors = {} } = await submitQA(data);
+            const {errors, successPrisma, url} = await submitQA(data);
+            console.log("URL: ", url);
+            console.log("Success prisma addition: ", successPrisma);
 
             // Define a mapping between server-side field names and their corresponding client-side names
             const fieldErrorMapping: Record<string, ValidFieldNames> = {

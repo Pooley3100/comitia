@@ -4,7 +4,7 @@ import FormField from "./FormField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { submitQA } from "@/library/actions";
 
-const QAndA = () => {
+const QAndA = ({update} : {update: (url: string) => void}) => {
     const {
         register,
         handleSubmit,
@@ -15,9 +15,14 @@ const QAndA = () => {
     const onSubmit = async (data: FormData) => {
         console.log("SUCCESS CLIENT SIDE", data);
         try {
-            const {errors, successPrisma, url} = await submitQA(data);
-            console.log("URL: ", url);
-            console.log("Success prisma addition: ", successPrisma);
+            const {errors, rndUrl} = await submitQA(data);
+            
+            if(rndUrl === null){
+                console.log("Error updating databse")
+            } else{
+                console.log("URL: ", rndUrl);
+                update(rndUrl);
+            }
 
             // Define a mapping between server-side field names and their corresponding client-side names
             const fieldErrorMapping: Record<string, ValidFieldNames> = {

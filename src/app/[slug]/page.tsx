@@ -30,19 +30,21 @@ const Forum = async ({params} : {params: {slug: string}}) => {
     <div className="flex flex-col w-full h-auto bg-red-500 p-2 items-center rounded-lg mb-10">
       <h1 className="text-5xl font-roman text-white">{question?.question}</h1>
       <div className="flex flex-row justify-start w-full">
-        <p className="w-4/6 h-auto bg-white p-3 font-roman m-3 rounded-md">{question?.details}</p>
+        <p className="w-4/6 h-auto bg-white p-3 font-roman text-black m-3 rounded-md lg:text-2xl">{question?.details}</p>
+        <div className="w-2/6 justify-center items-center flex">
         <QRCode
         size={256}
-        className="h-auto w-auto"
+        className="h-auto w-auto border-8 border-yellow-400 shadow-2xl"
         value={"http://localhost:3000/" + url}
         viewBox={'0 0 256 256'}
         />
+        </div>
       </div>
     </div>
     
     {/* List of answers */}
     <Suspense>
-      <Answers/>
+      <Answers url={url}/>
     </Suspense>
   </div>
 

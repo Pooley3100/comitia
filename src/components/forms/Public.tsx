@@ -8,7 +8,7 @@ const Public = ({ url }: { url: string | null }) => {
         } else {
             
         }
-        router.push('forum/' + url || '/'); // Replace '/' with the default URL if `url` is null
+        router.push(url || '/'); // Replace '/' with the default URL if `url` is null
     }
 
 

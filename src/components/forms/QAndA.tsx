@@ -61,7 +61,7 @@ const QAndA = ({update} : {update: (url: string) => void}) => {
                 className="bg-white w-4/5 p-2 rounded-md text-black whitespace-normal"
             />
             <h1>Details</h1>
-            <textarea rows={20} className="w-4/5 resize-none rounded-md text-black" id='details' placeholder="Cats require less work, however dogs are more loyal, discuss?" {...register("details")}></textarea>
+            <textarea rows={6} className="w-4/5 resize-none rounded-md text-black" id='details' placeholder="Cats require less work, however dogs are more loyal, discuss?" {...register("details")}></textarea>
             {errors.details && <span className="text-black text-sm">{errors.details.message}</span>}
             <div className="flex h-full items-end w-1/4 rounded-2xl text-black">
                 <button type="submit" className="bg-yellow-400 w-full rounded-2xl">

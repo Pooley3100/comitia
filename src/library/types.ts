@@ -1,4 +1,4 @@
-import { FieldError, UseFormRegister} from "react-hook-form";
+import { Control, FieldError, UseFormRegister} from "react-hook-form";
 import { z, ZodType } from "zod";
 
 export type FormData = {
@@ -11,6 +11,16 @@ export type ResponseData = {
     name: string
 }
 
+type options = {
+    option: string
+}
+
+export type PollData = {
+    question: string,
+    details: string,
+    options: Array<options>
+}
+
 export type FormFieldProps = {
     type: string;
     placeholder: string;
@@ -19,6 +29,25 @@ export type FormFieldProps = {
     error: FieldError | undefined;
     valueAsNumber?: boolean
 }
+
+export type PollFieldProps = {
+    type: string;
+    register: UseFormRegister<PollData>;
+    name: ValidPollFieldNames;
+    error: FieldError | undefined;
+    control: Control<PollData, any>
+}
+
+export const OptionSchema = z.object({
+    option: z.string().min(2).max(40),
+})
+
+export const PollSchema: ZodType<PollData> = z.object
+({
+    question: z.string().min(2).max(21),
+    details: z.string().max(100),
+    options: z.array(OptionSchema).min(2).max(6),
+})
 
 export const UserSchema: ZodType<FormData> = z.object
 ({
@@ -34,3 +63,4 @@ export const ResponseSchema: ZodType<ResponseData> = z.object
 
 export type ValidFieldNames = "question" | "details"
 export type ValidResponseFieldName = "name" | "response"
+export type ValidPollFieldNames = "question" | "details" | "options"

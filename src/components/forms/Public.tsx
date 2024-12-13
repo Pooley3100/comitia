@@ -1,12 +1,12 @@
+import { updatePublicQ } from "@/library/actions";
 import { useRouter } from "next/navigation";
 
-const Public = ({ url }: { url: string | null }) => {
+const Public = ({ url }: { url: string }) => {
     const router = useRouter();
     function directToSite(publicBool: boolean) {
+        //Only if set to public does it need to update, default is false
         if (publicBool) {
-           
-        } else {
-            
+           updatePublicQ(url);
         }
         router.push(url || '/'); // Replace '/' with the default URL if `url` is null
     }

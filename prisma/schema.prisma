@@ -8,14 +8,15 @@ datasource db {
 }
 
 
-// define tables
+// define question
 model Questions{
   id Int @id @default(autoincrement())
   question String
-  details String
+  details String? //optional
   responseId Response[]
   public Boolean
   url String @unique
+  views Int @default(0)
 }
 
 model Polls{
@@ -23,6 +24,8 @@ model Polls{
   question String
   options String
   clickCount Json
+  url String @unique
+  views Int @default(0)
 }
 
 model Response{
@@ -32,4 +35,5 @@ model Response{
   questionId Int
   questions Questions @relation(fields: [questionId], references: [id])
   responseText String
+  likes Int @default(0)
 }

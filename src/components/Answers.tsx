@@ -1,6 +1,6 @@
 'use client'
 import NewResponse from "@/components/forms/NewResponse";
-import { getResponsesByUrl } from "@/library/utils";
+import { getResponsesByUrl, updateViews } from "@/library/utils";
 import { useState, useEffect } from "react";
 import { Response } from "@prisma/client";
 import LikeButtons from "./LikeButtons";
@@ -9,12 +9,14 @@ const Answers = ({ url }: { url: string }) => {
   const [formShow, setFormShow] = useState<Boolean>(false);
   const [responses, setResponses] = useState<Response[]>([]);
   const [lastResponseTimestamp, setLastResponseTimestamp] = useState<Date | null>(null);
-
+  useEffect(() => {
+    updateViews(url);
+  }, []);
   useEffect(() => {
     async function fetchResponses() {
       try {
         const fetchedResponses: Response[] = await getResponsesByUrl(url, lastResponseTimestamp);
-        //console.log(fetchedResponses)
+        console.log('Fetched: ' , fetchedResponses)
         //debugger;
         if (fetchedResponses.length > 0) {
           setResponses((prevResponses) => [...prevResponses, ...fetchedResponses]);
@@ -36,7 +38,7 @@ const Answers = ({ url }: { url: string }) => {
     setFormShow(!formShow);
   }
 
-  console.log(responses);
+  console.log('Current Responses', responses);
   return (
     <>
       {formShow && <NewResponse url={url} formSet={formSet} />}
@@ -50,7 +52,7 @@ const Answers = ({ url }: { url: string }) => {
                   <p className="text-gray-400 capitalize">{response.name}</p>
                   <p className="text-black">{response.responseText}</p>
                 </div>
-                <LikeButtons />
+                <LikeButtons responseId={response.id} likes={response.likes}/>
               </div>
             </li>
           ))}

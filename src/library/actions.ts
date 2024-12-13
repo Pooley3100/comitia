@@ -1,5 +1,5 @@
 'use server'
-import { UserSchema, FormData, ResponseData, ResponseSchema } from "@/library/types";
+import { UserSchema, FormData, ResponseData, ResponseSchema, PollData } from "@/library/types";
 import { getRandomURL } from "@/library/utils"
 import prisma from "./prisma";
 
@@ -8,7 +8,7 @@ type response = {
     errors: { [key: string]: string | undefined }
 }
 
-//Receive question declerations
+//Receive question declerations on form question creation
 export async function submitQA(data: FormData): Promise<response> {
     //const body = data.entries();
     const result = UserSchema.safeParse(data);
@@ -43,7 +43,11 @@ export async function submitQA(data: FormData): Promise<response> {
     return ({ errors: serverErrors, rndUrl: null });
 }
 
-//Receive responses to questions
+export async function submitPoll(data: PollData){
+
+}
+
+//Receive list responses to questions, dependdent on url
 export async function submitQAResponse(data: ResponseData, url: string) {
     const result = ResponseSchema.safeParse(data);
 
@@ -81,4 +85,38 @@ export async function submitQAResponse(data: ResponseData, url: string) {
     );
 
     return ({ errors: serverErrors });
+}
+
+// update number likes on a response
+export async function updateDbLikes(responseId: number){
+    try{
+        const updateResponse = await prisma.response.update({
+            where: {
+                id: responseId
+            },
+            data: { 
+                likes: {
+                    increment: 1,
+                }
+            }
+        })
+    } catch(err){
+        console.log('dr err in update responses')
+    }
+}
+
+//update public to true, default is false when creating question
+export async function updatePublicQ(url: string){
+    try{
+        const updateResponse = await prisma.questions.update({
+            where: {
+                url
+            },
+            data: { 
+                public: true
+            }
+        })
+    } catch(err){
+        console.log('dr err in update public')
+    }
 }

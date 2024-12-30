@@ -28,12 +28,14 @@ const PollOptions: React.FC<PollFieldProps> = ({
             <h2 className='text-lg'>PollOptions</h2>
             <div className='h-[150px] overflow-y-scroll flex items-center flex-col gap-5'>
                 {fields.length < 3 ? fields.map((field, index) => (
-                    <input
-                        key={field.id} // important to include key with field's id
+                    <div key={field.id}>
+                    <input     
                         placeholder='New Option'
                         className='rounded-lg'
-                        {...register(`options.${index}.option`)}
+                        {...register(`options.${index}.option`)}          
                     />
+                    {(Array.isArray(error) && error[index]) && <span className="text-red text-sm">{error[index].option.message}</span>}
+                    </div>
                 )) :
                     <div className='flex flex-row gap-5'>
                         <div className='flex flex-col gap-2'>

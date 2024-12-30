@@ -1,6 +1,6 @@
 'use server'
-import { UserSchema, FormData, ResponseData, ResponseSchema, PollData } from "@/library/types";
-import { getRandomURL } from "@/library/utils"
+import { UserSchema, FormData, ResponseData, ResponseSchema, PollData, PollSchema } from "@/library/types";
+import { getRandomURL, getRandomURLPoll } from "@/library/utils"
 import prisma from "./prisma";
 
 type response = {
@@ -44,7 +44,36 @@ export async function submitQA(data: FormData): Promise<response> {
 }
 
 export async function submitPoll(data: PollData){
+    const result = PollSchema.safeParse(data);
+    // Check if the validation is successful and if so attempt to add to database
+    if (result.success) {
+        let rndUrl: string = '';
+        try {
+            const rndUrl: string = await getRandomURLPoll()
+            if (rndUrl === 'Error') throw new Error("Error occurred in random generation");
+            await prisma.polls.create({
+                data: {
+                    question: data.question,
+                    public: false,
+                    url: rndUrl,
+                    clickCount: [],
+                    options: data.options
+                },
+            });
+            return ({ rndUrl, errors: {} })
+        } catch (err) {
+            console.log(err);
+            return { errors: {}, rndUrl: null };
+        }
+    }
 
+    // If validation errors, map them into an object
+    const serverErrors = Object.fromEntries(
+        result.error?.issues?.map((issue) => [issue.path[0], issue.message]) || []
+    );
+
+    // Respond with a JSON object containing the validation errors
+    return ({ errors: serverErrors, rndUrl: null });
 }
 
 //Receive list responses to questions, dependdent on url

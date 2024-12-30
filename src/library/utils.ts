@@ -24,11 +24,35 @@ export async function getRandomURL(): Promise<string> {
     });
 }
 
+//Looks for url for Polls
+export async function getRandomURLPoll(): Promise<string> {
+  const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let url: string = '';
+
+  while (url.length < 12) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    url += characters[randomIndex];
+  }
+
+  return prisma.polls.findFirst({ where: { url } })
+    .then((question) => {
+      if (question) {
+        return getRandomURLPoll();
+      } else {
+        return url;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      return "Error";
+    });
+}
+
 //Update list of responses for a url, return any greater than a time stamp (stop refresh whole lot every time)
 export async function getResponsesByUrl(url: string, lastResponseTimestamp?: Date | null) {
   const queryTime: Date = lastResponseTimestamp ? lastResponseTimestamp : new Date('04 Dec 1995 00:12:00 GMT');
   const questionWithResponses = await prisma.questions.findUnique({
-    where: { url },
+    where:  {url},
     include: {
       responseId: {
         where: {

@@ -23,7 +23,7 @@ const Create = () => {
                     <button onClick={() => formSet("false")} className="p-4 bg-white rounded-sm text-black">X</button>
                 </div>
                 <div className={`flex w-full h-auto justify-center`}>
-                    {formShow === 'qAndA' ? <QAndA update={publicSet} /> : formShow === 'poll' ? <Poll /> : formShow === 'public' ? <Public url={newUrl} /> : <></>}
+                    {formShow === 'qAndA' ? <QAndA update={publicSet} /> : formShow === 'poll' ? <Poll update={publicSet} /> : formShow === 'public' ? <Public url={newUrl} /> : <></>}
                 </div>
             </div>
         </div>

@@ -30,7 +30,7 @@ const Poll = ({ update }: { update: (url: string) => void }) => {
             // Define a mapping between server-side field names and their corresponding client-side names
             const fieldErrorMapping: Record<string, ValidPollFieldNames> = {
                 question: "question",
-                details: "details"
+                options: "options",
             };
 
             // Find the first field with an error in the response data
@@ -57,14 +57,9 @@ const Poll = ({ update }: { update: (url: string) => void }) => {
             <div className="flex flex-row">
             <h3 className="text-lg mr-10">What is the Question: </h3>
             <input className='' type='text' placeholder='Cats or Dogs' {...register('question')} />
-            {errors.question && <span className="text-black text-sm">{errors.question.message}</span>}
+            {errors.question && <span className="ml-5 text-black text-sm">{errors.question.message}</span>}
             </div>
             
-            <div className="flex flex-row">
-            <h1 className="text-lg mr-10">Details:</h1>
-            <textarea rows={4} className="w-4/5 resize-none rounded-md text-black" id='details' placeholder="Cats require less work, however dogs are more loyal, discuss?" {...register("details")}></textarea>
-            </div>
-            {errors.details && <span className="text-black text-sm">{errors.details.message}</span>}
             <PollOptions control={control} type='text' register={register} name='options' error={errors.options} />
             <div className="flex h-auto items-end w-1/4 rounded-2xl text-black">
                 <button type="submit" className="bg-red-400 w-full rounded-2xl">

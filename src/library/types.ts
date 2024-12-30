@@ -17,7 +17,6 @@ type options = {
 
 export type PollData = {
     question: string,
-    details: string,
     options: Array<options>
 }
 
@@ -45,7 +44,6 @@ export const OptionSchema = z.object({
 export const PollSchema: ZodType<PollData> = z.object
 ({
     question: z.string().min(2).max(21),
-    details: z.string().max(100),
     options: z.array(OptionSchema).min(2).max(6),
 })
 
@@ -63,4 +61,4 @@ export const ResponseSchema: ZodType<ResponseData> = z.object
 
 export type ValidFieldNames = "question" | "details"
 export type ValidResponseFieldName = "name" | "response"
-export type ValidPollFieldNames = "question" | "details" | "options"
+export type ValidPollFieldNames = "question" | "options"

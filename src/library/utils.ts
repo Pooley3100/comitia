@@ -88,3 +88,31 @@ export async function updateViews(url: string) {
     console.log('Db err on update views')
   }
 }
+
+export async function updateVoteClick(url: string, index: number) {
+  try {
+    // Fetch the current clickCount array
+    const poll = await prisma.polls.findUnique({
+      where: { url },
+      select: { clickCount: true }
+    });
+
+    if (!poll) {
+      throw new Error('Poll not found');
+    }
+
+    // Update the specific element in the array
+    const updatedClickCount = [...poll.clickCount];
+    updatedClickCount[index] += 1;
+
+    // Save the updated array back to the database
+    await prisma.polls.update({
+      where: { url },
+      data: {
+        clickCount: updatedClickCount
+      }
+    });
+  } catch (err) {
+    console.log('Db err on update vote count', err);
+  }
+}

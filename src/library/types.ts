@@ -11,13 +11,9 @@ export type ResponseData = {
     name: string
 }
 
-type options = {
-    option: string
-}
-
 export type PollData = {
     question: string,
-    options: Array<options>
+    options: string[]
 }
 
 export type FormFieldProps = {
@@ -37,14 +33,10 @@ export type PollFieldProps = {
     control: Control<PollData, any>
 }
 
-export const OptionSchema = z.object({
-    option: z.string().min(2).max(40),
-})
-
 export const PollSchema: ZodType<PollData> = z.object
 ({
     question: z.string().min(2).max(21),
-    options: z.array(OptionSchema).min(2).max(6),
+    options: z.array(z.string()).min(2).max(6),
 })
 
 export const UserSchema: ZodType<FormData> = z.object

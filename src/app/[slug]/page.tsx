@@ -1,9 +1,10 @@
 import prisma from "@/library/prisma";
-import { Questions } from "@prisma/client";
+import { Polls, Questions } from "@prisma/client";
 import Answers from "@/components/Answers";
 import { Suspense } from "react";
 import QRCode from "react-qr-code";
 import { updateViews } from "@/library/utils";
+import PollVotePage from "@/components/PollVotePage";
 
 const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
   const url = (await params).slug
@@ -24,7 +25,7 @@ const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
       console.log(err);
       return null;
     });
-  let poll = null
+  let poll : null | Polls = null
   //Search through polls database
   if (!question) {
     poll = await prisma.polls.findFirst({ where: { url } }).then((poll) => {
@@ -65,7 +66,7 @@ const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
     </div>
 
   const PollObj =
-    <div className="flex w-4/5 justify-center items-center p-2">
+    <div className="flex flex-col w-4/5 items-center p-2">
       {/* Question and QR code */}
       <div className="flex flex-col w-2/3 h-auto bg-yellow-400 p-2 items-center rounded-lg mb-10">
         <h1 className="text-5xl font-roman text-black">{poll?.question}</h1>
@@ -82,6 +83,9 @@ const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
       </div>
 
       {/* List of options to vote on*/}
+      <Suspense>
+        <PollVotePage url={url} pollObj={poll!} />
+      </Suspense>
 
     </div>
 

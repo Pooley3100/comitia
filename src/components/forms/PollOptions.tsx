@@ -1,6 +1,6 @@
 'use client'
 
-import { OptionSchema, PollFieldProps } from '@/library/types'
+import {PollFieldProps } from '@/library/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { useState } from 'react'
@@ -19,9 +19,9 @@ const PollOptions: React.FC<PollFieldProps> = ({
         rules: { minLength: 2, required: "Please create at least two options" }
     });
     const onClick = () => {
-        append({
-            option: ''
-        })
+        append([
+            'Option',
+        ])
     }
     return (
         <>
@@ -32,7 +32,7 @@ const PollOptions: React.FC<PollFieldProps> = ({
                     <input     
                         placeholder='New Option'
                         className='rounded-lg'
-                        {...register(`options.${index}.option`)}          
+                        {...register(`options.${index}`)}          
                     />
                     {(Array.isArray(error) && error[index]) && <span className="text-red text-sm">{error[index].option.message}</span>}
                     </div>
@@ -44,7 +44,7 @@ const PollOptions: React.FC<PollFieldProps> = ({
                                     key={field.id} // important to include key with field's id
                                     placeholder='New Option'
                                     className='rounded-lg'
-                                    {...register(`options.${index}.option`)}
+                                    {...register(`options.${index}`)}
                                 />
                             ))}
                         </div>
@@ -54,7 +54,7 @@ const PollOptions: React.FC<PollFieldProps> = ({
                                 key={field.id} // important to include key with field's id
                                 placeholder='New Option'
                                 className='rounded-lg'
-                                {...register(`options.${index}.option`)}
+                                {...register(`options.${index}`)}
                             />
                         ))}
                         </div>

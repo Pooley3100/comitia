@@ -12,7 +12,7 @@ const Poll = ({ update }: { update: (url: string) => void }) => {
         setError,
         control,
     } = useForm<PollData>({ resolver: zodResolver(PollSchema), defaultValues: {
-        options: [{option: ""}, {option: ""}]
+        options: ['Input 1','Input 2']
     } });
 
     const onSubmit = async (data: PollData) => {

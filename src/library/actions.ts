@@ -44,26 +44,31 @@ export async function submitQA(data: FormData): Promise<response> {
 }
 
 export async function submitPoll(data: PollData){
+    console.log('received: ', data)
+    console.log('array', data.options)
     const result = PollSchema.safeParse(data);
+    console.log('result is', result)
     // Check if the validation is successful and if so attempt to add to database
     if (result.success) {
-        let rndUrl: string = '';
         try {
             const rndUrl: string = await getRandomURLPoll()
             if (rndUrl === 'Error') throw new Error("Error occurred in random generation");
+            const clickArr = Array(data.options.length).fill(0);
             await prisma.polls.create({
                 data: {
                     question: data.question,
                     public: false,
                     url: rndUrl,
-                    clickCount: [],
+                    clickCount: clickArr,
                     options: data.options
                 },
             });
+
             return ({ rndUrl, errors: {} })
-        } catch (err) {
-            console.log(err);
-            return { errors: {}, rndUrl: null };
+        } catch(error) {
+            if (error instanceof Error){
+                console.log("Error: ", error.stack)
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import { getResponsesByUrl, updateViews } from "@/library/utils";
 import { useState, useEffect } from "react";
 import { Response } from "@prisma/client";
 import LikeButtons from "./LikeButtons";
+import { orderResponses } from "@/library/clientUtils";
 
 const Answers = ({ url }: { url: string }) => {
   const [formShow, setFormShow] = useState<Boolean>(false);
@@ -12,20 +13,38 @@ const Answers = ({ url }: { url: string }) => {
   useEffect(() => {
     updateViews(url);
   }, []);
-  useEffect(() => {
-    async function fetchResponses() {
-      try {
-        const fetchedResponses: Response[] = await getResponsesByUrl(url, lastResponseTimestamp);
-        console.log('Fetched: ' , fetchedResponses)
-        //debugger;
-        if (fetchedResponses.length > 0) {
-          setResponses((prevResponses) => [...prevResponses, ...fetchedResponses]);
-          setLastResponseTimestamp(fetchedResponses[fetchedResponses.length - 1].createdAt);
-        }
-      } catch (error) {
-        console.error("Error fetching responses:", error);
+  //Out here so use effect can call and to allow force updates
+  async function fetchResponses() {
+    try {
+      //Uses time stamp to check if responses have been added.
+      const fetchedResponses: Response[] = await getResponsesByUrl(url, lastResponseTimestamp);
+      console.log('Fetched: ', fetchedResponses)
+
+      if (fetchedResponses.length > 0) {
+        //Update time stamp for last update.
+        setLastResponseTimestamp(fetchedResponses[fetchedResponses.length - 1].createdAt);
+        //Updates response and also order by likes
+        setResponses((prevResponses) => {
+          return (orderResponses([...prevResponses, ...fetchedResponses]))
+        });
       }
+    } catch (error) {
+      console.error("Error fetching responses:", error);
     }
+  }
+  //Called by like button upon click to re order posts by likes
+  function updateLikeOrder(responseIndex : number){
+    setResponses((prevResponses : Response[]) => {
+      const responses = prevResponses.map((response) => {
+        if (response.id == responseIndex){
+          response.likes += 1
+        }
+        return response
+      })
+      return(orderResponses(responses))
+    })
+  }
+  useEffect(() => {
     //Update Responses then set timer to check every 10 seconds
     fetchResponses();
     const timer = setInterval(() => fetchResponses(), 10000);
@@ -36,6 +55,10 @@ const Answers = ({ url }: { url: string }) => {
 
   function formSet() {
     setFormShow(!formShow);
+    //Force immediate update to db for responses
+    if(formShow){
+      fetchResponses();
+    }
   }
 
   console.log('Current Responses', responses);
@@ -52,7 +75,7 @@ const Answers = ({ url }: { url: string }) => {
                   <p className="text-gray-400 capitalize">{response.name}</p>
                   <p className="text-black">{response.responseText}</p>
                 </div>
-                <LikeButtons responseId={response.id} likes={response.likes}/>
+                <LikeButtons updateOrder={updateLikeOrder} responseId={response.id} url={url} likes={response.likes} />
               </div>
             </li>
           ))}

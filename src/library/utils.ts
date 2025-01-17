@@ -89,7 +89,7 @@ export async function updateViews(url: string) {
   }
 }
 
-export async function updateVoteClick(url: string, index: number) {
+export async function updateVoteClick(url: string, index: number): Promise<null> {
   try {
     // Fetch the current clickCount array
     const poll = await prisma.polls.findUnique({
@@ -112,7 +112,10 @@ export async function updateVoteClick(url: string, index: number) {
         clickCount: updatedClickCount
       }
     });
+
+    return null; // Add a return statement
   } catch (err) {
     console.log('Db err on update vote count', err);
+    return null; // Add a return statement
   }
 }

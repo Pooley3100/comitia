@@ -142,7 +142,7 @@ export async function updateDbLikes(responseId: number){
 //update public to true, default is false when creating question
 export async function updatePublicQ(url: string){
     try{
-        const updateResponse = await prisma.questions.update({
+        await prisma.questions.update({
             where: {
                 url
             },
@@ -151,6 +151,19 @@ export async function updatePublicQ(url: string){
             }
         })
     } catch(err){
-        console.log('dr err in update public')
+        // bit hacky but then try update polls
+        try{
+            await prisma.polls.update({
+                where: {
+                    url
+                },
+                data: { 
+                    public: true
+                }
+            })
+        } catch(err){
+            // bit hacky but then try update polls
+            console.log('dr err in update public for url: ', url)
+        }
     }
 }

@@ -20,7 +20,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="flex flex-col w-full gap-4 items-center mt-10 font-roman">
+    <div className="flex flex-col w-full gap-4 items-center mt-10 font-roman" id="forumList">
     {/** List of all public questions */}
     {questions.map((question) => {
       return(<a key={question.url} className="bg-red-600 w-3/5 rounded-md flex justify-between items-center p-5 shadow-lg hover:bg-red-500" href={`/${question.url}`}>
@@ -31,7 +31,7 @@ export default async function Home() {
     {/** List of all polls */}
     {polls.map((poll) => {
       const total = sum(poll.clickCount)
-      return(<a key={poll.url} className="bg-yellow-500 w-3/5 rounded-md flex justify-between items-center p-5 shadow-lg hover:bg-yellow-700" href={`/${poll.url}`}>
+      return(<a key={poll.url} id="qList" className="bg-yellow-500 w-3/5 rounded-md flex justify-between items-center p-5 shadow-lg hover:bg-yellow-700" href={`/${poll.url}`}>
         <h2 className="text-3xl">{poll.question}</h2>
         <div className="flex flex-col bg-white text-black p-2 rounded-lg w-[100px]"><p>Views: {poll.views}</p><p>Votes: {total} </p></div>
         </a>)

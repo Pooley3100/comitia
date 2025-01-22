@@ -3,7 +3,7 @@ import { z, ZodType } from "zod";
 
 export type FormData = {
     question: string,
-    details: string
+    details: string,
 }
 
 export type ResponseData = {
@@ -41,8 +41,8 @@ export const PollSchema: ZodType<PollData> = z.object
 
 export const UserSchema: ZodType<FormData> = z.object
 ({
-    question: z.string().min(2).max(21),
-    details: z.string().max(100)
+    question: z.string().min(2).max(50),
+    details: z.string().max(300)
 })
 
 export const ResponseSchema: ZodType<ResponseData> = z.object

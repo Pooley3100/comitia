@@ -5,9 +5,11 @@ import { Suspense } from "react";
 import QRCode from "react-qr-code";
 import { updateViews } from "@/library/utils";
 import PollVotePage from "@/components/PollVotePage";
+import DeletePage from "@/components/DeletePage";
 
 const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
   const url = (await params).slug
+  let deleteid = null;
   console.log("url is: ", url)
   //await new Promise((resolve) => setTimeout(resolve, 2000))
   let question: Questions | null
@@ -15,7 +17,8 @@ const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
   question = await prisma.questions.findFirst({ where: { url } })
     .then((question) => {
       if (question) {
-        //Question found  
+        //Question found
+        deleteid = question?.deleteId
         return question;
       } else {
         return null;
@@ -30,6 +33,7 @@ const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
   if (!question) {
     poll = await prisma.polls.findFirst({ where: { url } }).then((poll) => {
       if (poll) {
+        deleteid = poll?.deleteId;
         return poll;
       } else {
         return null;
@@ -90,7 +94,8 @@ const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
     </div>
 
   return (
-    <div className="flex w-ful h-full justify-center p-7">
+    <div className="flex flex-col w-ful h-full justify-center items-center p-7">
+      <DeletePage deleteId={deleteid}/>
       {(!question && !poll) ? NotFound : (question) ? QuestionList : PollObj}
     </div>
   )

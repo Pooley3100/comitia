@@ -45,3 +45,15 @@ export function orderResponses(responses : Response[]) : Response[]{
     
       return [...orderResponses(leftArr), pivot, ...orderResponses(rightArr)];
 }
+
+//Create Delete ID
+export function createDeleteId(): string{
+  const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let id: string = '';
+
+  while (id.length < 12) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    id += characters[randomIndex];
+  }
+  return id
+}

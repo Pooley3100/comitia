@@ -3,6 +3,7 @@ import { PollData, PollSchema, ValidPollFieldNames } from "@/library/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { submitPoll } from "@/library/actions";
 import PollOptions from "./PollOptions";
+import { createDeleteId, setCookie } from "@/library/clientUtils";
 
 const Poll = ({ update }: { update: (url: string) => void }) => {
     const {
@@ -18,12 +19,14 @@ const Poll = ({ update }: { update: (url: string) => void }) => {
     const onSubmit = async (data: PollData) => {
         console.log("SUCCESS CLIENT SIDE", data);
         try {
-            const { errors, rndUrl } = await submitPoll(data);
+            const deleteId = createDeleteId();
+            const { errors, rndUrl } = await submitPoll(data, deleteId);
 
             if (rndUrl === null) {
                 console.log("Error updating databse")
             } else {
                 console.log("URL: ", rndUrl);
+                setCookie(deleteId, 'allow');
                 update(rndUrl);
             }
 

@@ -3,7 +3,7 @@ import prisma from './prisma';
 
 export async function getRandomURL(): Promise<string> {
   const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let url: string = '';
+  let url: string = 'q';
 
   while (url.length < 12) {
     const randomIndex = Math.floor(Math.random() * characters.length);
@@ -24,10 +24,26 @@ export async function getRandomURL(): Promise<string> {
     });
 }
 
+//Check poll click count for live update
+export async function checkPolls(url : string): Promise<number[] | null>{
+  try{
+    const likes = await prisma.polls.findUnique({
+      where: {url},
+      select: {
+        clickCount: true
+      }
+    })
+    return (likes) ? likes?.clickCount : null;
+  } catch(err){
+    console.log("error in checking for poll count: ", url)
+    return null
+  }
+}
+
 //Looks for url for Polls
 export async function getRandomURLPoll(): Promise<string> {
   const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let url: string = '';
+  let url: string = 'p';
 
   while (url.length < 12) {
     const randomIndex = Math.floor(Math.random() * characters.length);

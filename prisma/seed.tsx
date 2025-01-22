@@ -7,11 +7,12 @@ async function main() {
     where: { url: 'han-vs-matt' },
     update: {},
     create: {
-      url: 'han-vs-matt',
+      url: 'qhan-vs-matt',
       question: 'Who is better: Han or Matt?',
       details: 'Based on this we shall decide which kid to get rid of',
       public: true,
       views: 0,
+      deleteId: 'test1'
     },
   });
 
@@ -39,11 +40,12 @@ async function main() {
     where: { url: 'favorite-programming-language' },
     update: {},
     create: {
-      url: 'favorite-programming-language',
+      url: 'pfavorite-programming-language',
       question: 'What is your favorite programming language?',
       options: ['JavaScript', 'Python', 'TypeScript', 'Java'],
       public: true,
       clickCount: [0, 0, 0, 0],
+      deleteId: 'test2'
     },
   });
 
@@ -52,11 +54,12 @@ async function main() {
     where: { url: 'cats-vs-dogs' },
     update: {},
     create: {
-      url: 'cats-vs-dogs',
+      url: 'pcats-vs-dogs',
       question: 'Which is better: cats or dogs?',
       options: ['Cats', 'Dogs'],
       public: true,
       clickCount: [0, 0],
+      deleteId: 'test3'
     },
   });
 

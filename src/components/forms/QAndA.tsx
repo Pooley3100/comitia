@@ -3,6 +3,7 @@ import { FormData, UserSchema, ValidFieldNames } from "@/library/types";
 import FormField from "./FormField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { submitQA } from "@/library/actions";
+import { createDeleteId, setCookie } from "@/library/clientUtils";
 
 const QAndA = ({update} : {update: (url: string) => void}) => {
     const {
@@ -15,12 +16,14 @@ const QAndA = ({update} : {update: (url: string) => void}) => {
     const onSubmit = async (data: FormData) => {
         console.log("SUCCESS CLIENT SIDE", data);
         try {
-            const {errors, rndUrl} = await submitQA(data);
+            const deleteId = createDeleteId();
+            const {errors, rndUrl} = await submitQA(data, deleteId);
             
             if(rndUrl === null){
                 console.log("Error updating databse")
             } else{
                 console.log("URL: ", rndUrl);
+                setCookie(deleteId, 'allow')
                 update(rndUrl);
             }
 
@@ -58,13 +61,14 @@ const QAndA = ({update} : {update: (url: string) => void}) => {
                 name="question"
                 register={register}
                 error={errors.question}
+                id="qBox"
                 className="bg-white w-4/5 p-2 rounded-md text-black whitespace-normal"
             />
             <h1>Details</h1>
-            <textarea rows={6} className="w-4/5 resize-none rounded-md text-black" id='details' placeholder="Cats require less work, however dogs are more loyal, discuss?" {...register("details")}></textarea>
-            {errors.details && <span className="text-black text-sm">{errors.details.message}</span>}
+            <textarea id='detailsBox' rows={6} className="w-4/5 resize-none rounded-md text-black" placeholder="Cats require less work, however dogs are more loyal, discuss?" {...register("details")}></textarea>
+            {errors.details && <span className="text-black text-sm" id='error-msg'>{errors.details.message}</span>}
             <div className="flex h-full items-end w-1/4 rounded-2xl text-black">
-                <button type="submit" className="bg-yellow-400 w-full rounded-2xl">
+                <button type="submit" className="bg-yellow-400 w-full rounded-2xl" id="createButton">
                     Create
                 </button>
             </div>

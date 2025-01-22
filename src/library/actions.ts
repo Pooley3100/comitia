@@ -9,7 +9,7 @@ type response = {
 }
 
 //Receive question declerations on form question creation
-export async function submitQA(data: FormData): Promise<response> {
+export async function submitQA(data: FormData, deleteId: string): Promise<response> {
     //const body = data.entries();
     const result = UserSchema.safeParse(data);
 
@@ -24,7 +24,8 @@ export async function submitQA(data: FormData): Promise<response> {
                     question: data.question,
                     details: data.details,
                     public: false,
-                    url: rndUrl
+                    url: rndUrl,
+                    deleteId: deleteId
                 },
             });
             return ({ rndUrl, errors: {} })
@@ -43,7 +44,7 @@ export async function submitQA(data: FormData): Promise<response> {
     return ({ errors: serverErrors, rndUrl: null });
 }
 
-export async function submitPoll(data: PollData){
+export async function submitPoll(data: PollData, deleteId: string) : Promise<response>{
     console.log('received: ', data)
     console.log('array', data.options)
     const result = PollSchema.safeParse(data);
@@ -60,7 +61,8 @@ export async function submitPoll(data: PollData){
                     public: false,
                     url: rndUrl,
                     clickCount: clickArr,
-                    options: data.options
+                    options: data.options,
+                    deleteId: deleteId
                 },
             });
 
@@ -69,6 +71,7 @@ export async function submitPoll(data: PollData){
             if (error instanceof Error){
                 console.log("Error: ", error.stack)
             }
+            return { errors: {}, rndUrl: null };
         }
     }
 

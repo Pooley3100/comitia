@@ -17,6 +17,7 @@ model Questions{
   public Boolean
   url String @unique
   views Int @default(0)
+  deleteId String
 }
 
 model Polls{
@@ -27,6 +28,7 @@ model Polls{
   clickCount Int[]
   url String @unique
   views Int @default(0)
+  deleteId String
 }
 
 model Response{

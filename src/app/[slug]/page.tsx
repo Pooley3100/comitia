@@ -46,13 +46,13 @@ const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
 
   const NotFound = <p>Question Not Found</p>
   const QuestionList =
-    <div className="flex-col w-4/5 justify-center p-2">
+    <div className="flex-col md:w-4/5 w-full justify-center p-2">
       {/* Question and QR code */}
       <div className="flex flex-col w-full h-auto bg-red-500 p-2 items-center rounded-lg mb-10">
-        <h1 className="text-5xl font-roman text-white">{question?.question}</h1>
-        <div className="flex flex-row justify-start w-full">
-          <p className="w-4/6 h-auto bg-white p-3 font-roman text-black m-3 rounded-md lg:text-2xl">{question?.details}</p>
-          <div className="w-2/6 justify-center items-center flex">
+        <h1 className="md:text-5xl text-lg font-roman text-white">{question?.question}</h1>
+        <div className="flex min-[400px]:flex-row flex-col min-[400px]:justify-start max-[400px]:items-center w-full">
+          <p className="w-full min-[400px]:w-4/6 h-auto bg-white p-3 font-roman text-black m-3 rounded-md lg:text-2xl">{question?.details}</p>
+          <div className="min-[400px]:w-2/6 w-full justify-center items-center flex">
             <QRCode
               size={256}
               className="h-auto w-auto border-8 border-yellow-400 shadow-2xl"
@@ -70,10 +70,10 @@ const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
     </div>
 
   const PollObj =
-    <div className="flex flex-col w-4/5 items-center p-2">
+    <div className="flex flex-col md:w-4/5 w-full items-center p-2">
       {/* Question and QR code */}
-      <div className="flex flex-col w-2/3 h-auto bg-yellow-400 p-2 items-center rounded-lg mb-10">
-        <h1 className="text-5xl font-roman text-black">{poll?.question}</h1>
+      <div className="flex flex-col md:w-4/5 text-center w-full h-auto bg-yellow-400 p-2 items-center rounded-lg mb-10">
+        <h1 className="md:text-5xl text-2xl font-roman text-black">{poll?.question}</h1>
         <div className="flex flex-row justify-start w-full">
           <div className="w-full pt-5 justify-center items-center flex">
             <QRCode
@@ -94,7 +94,7 @@ const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
     </div>
 
   return (
-    <div className="flex flex-col w-ful h-full justify-center items-center p-7">
+    <div className="flex flex-col w-full h-full justify-center items-center sm:p-7">
       <DeletePage deleteId={deleteid}/>
       {(!question && !poll) ? NotFound : (question) ? QuestionList : PollObj}
     </div>

@@ -1,12 +1,14 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { getCookie } from '@/library/clientUtils'
 
 const DeletePage = ({ deleteId }: { deleteId: string | null }) => {
-    let result = null;
+    const [result, setResult]= useState(false);
     if (deleteId) {
-        result = getCookie(deleteId);
+        React.useEffect(() => {
+          setResult(getCookie(deleteId) ? true : false);
+        }, [deleteId]);
     }
     return (
         <>

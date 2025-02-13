@@ -73,7 +73,7 @@ const Answers = ({ url }: { url: string }) => {
               <div className="flex flex-row justify-between items-center">
                 <div>
                   <p className="text-gray-400 capitalize">{response.name}</p>
-                  <p className="text-black">{response.responseText}</p>
+                  <p className="text-black text-xs sm:text-lg">{response.responseText}</p>
                 </div>
                 <LikeButtons updateOrder={updateLikeOrder} responseId={response.id} url={url} likes={response.likes} />
               </div>

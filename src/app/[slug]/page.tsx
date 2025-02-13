@@ -1,9 +1,8 @@
 import prisma from "@/library/prisma";
-import { Polls, Questions } from "@prisma/client";
+import { Polls} from "@prisma/client";
 import Answers from "@/components/Answers";
 import { Suspense } from "react";
 import QRCode from "react-qr-code";
-import { updateViews } from "@/library/utils";
 import PollVotePage from "@/components/PollVotePage";
 import DeletePage from "@/components/DeletePage";
 
@@ -12,9 +11,7 @@ const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
   let deleteid = null;
   console.log("url is: ", url)
   //await new Promise((resolve) => setTimeout(resolve, 2000))
-  let question: Questions | null
-  //First search through question database:
-  question = await prisma.questions.findFirst({ where: { url } })
+  const question = await prisma.questions.findFirst({ where: { url } })
     .then((question) => {
       if (question) {
         //Question found
@@ -56,7 +53,7 @@ const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
             <QRCode
               size={256}
               className="h-auto w-auto border-8 border-yellow-400 shadow-2xl"
-              value={"http://localhost:3000/" + url}
+              value={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://your-domain.com'}/${url}`}
               viewBox={'0 0 256 256'}
             />
           </div>
@@ -79,7 +76,7 @@ const Forum = async ({ params }: { params: Promise<{ slug: string }>}) => {
             <QRCode
               size={256}
               className="h-auto w-auto border-8 border-red-500 shadow-2xl"
-              value={"http://localhost:3000/" + url}
+              value={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://your-domain.com'}/${url}`}
               viewBox={'0 0 256 256'}
             />
           </div>

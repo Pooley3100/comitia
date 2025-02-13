@@ -6,9 +6,9 @@ import Poll from "@/components/forms/Poll";
 import Public from "@/components/forms/Public";
 
 const Create = () => {
-    const [formShow, setFormShow] = useState<String>("false");
+    const [formShow, setFormShow] = useState<string>("false");
     const [newUrl, setNewUrl] = useState<string>('null');
-    function formSet(formOption: String) {
+    function formSet(formOption: string) {
         setFormShow(formOption);
     }
     //Once getting new form, another component is shown asking public or not then redirected to new url

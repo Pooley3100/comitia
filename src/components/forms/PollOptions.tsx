@@ -1,22 +1,15 @@
 'use client'
 
 import {PollFieldProps } from '@/library/types'
-import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
-import { useState } from 'react'
-import { useFieldArray } from 'react-hook-form'
+import { useFieldArray, useFormContext } from 'react-hook-form'
 
 const PollOptions: React.FC<PollFieldProps> = ({
-    type,
     register,
     error,
-    name,
-    control
 }) => {
-    const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
-        control, // control props comes from useForm (optional: if you are using FormProvider)
-        name: "options", // unique name for your Field Array
-        rules: { minLength: 2, required: "Please create at least two options" }
+    const { fields, append } = useFieldArray({
+        name: "options",
     });
     const onClick = () => {
         append([

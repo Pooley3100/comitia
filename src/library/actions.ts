@@ -15,24 +15,18 @@ export async function submitQA(data: FormData, deleteId: string): Promise<respon
 
     // Check if the validation is successful and if so attempt to add to database
     if (result.success) {
-        let rndUrl: string = '';
-        try {
-            const rndUrl: string = await getRandomURL()
-            if (rndUrl === 'Error') throw new Error("Error occurred in random generation");
-            await prisma.questions.create({
-                data: {
-                    question: data.question,
-                    details: data.details,
-                    public: false,
-                    url: rndUrl,
-                    deleteId: deleteId
-                },
-            });
-            return ({ rndUrl, errors: {} })
-        } catch (err) {
-            console.log(err);
-            return { errors: {}, rndUrl: null };
-        }
+        const rndUrl = await getRandomURL();
+        if (rndUrl === 'Error') throw new Error("Error occurred in random generation");
+        await prisma.questions.create({
+            data: {
+                question: data.question,
+                details: data.details,
+                public: false,
+                url: rndUrl,
+                deleteId: deleteId
+            },
+        });
+        return ({ rndUrl, errors: {} })
     }
 
     // If validation errors, map them into an object
@@ -52,7 +46,7 @@ export async function submitPoll(data: PollData, deleteId: string) : Promise<res
     // Check if the validation is successful and if so attempt to add to database
     if (result.success) {
         try {
-            const rndUrl: string = await getRandomURLPoll()
+            const rndUrl = await getRandomURLPoll()
             if (rndUrl === 'Error') throw new Error("Error occurred in random generation");
             const clickArr = Array(data.options.length).fill(0);
             await prisma.polls.create({

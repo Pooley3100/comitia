@@ -8,12 +8,26 @@ import Image from "next/image";
  * @param {Object} formSet - The form set object.
  * @returns {Function} - A function that takes a form option string and returns null.
  */
-const SelectButtons = ({formSet} : {formSet: (formOption: string) => void}) => {
-    const [showTextQ, setTextQ] = useState<Boolean>(false);
-    const [showTextP, setTextP] = useState<Boolean>(false)
-    function setShowText(bool: Boolean, box: String) {
-        box === 'question' ? setTextQ(bool) : setTextP(bool)
-    }
+interface Props {
+  isLiked: boolean;
+  isDisliked: boolean;
+  isSelected: boolean;
+  selectedText: string;
+  // ... other props
+}
+
+interface FormSetProps {
+  formSet: (formOption: string) => void;
+}
+
+const SelectButtons = ({formSet}: FormSetProps) => {
+    const [showTextQ, setTextQ] = useState<boolean>(false);
+    const [showTextP, setTextP] = useState<boolean>(false);
+    
+    const setShowText = (bool: boolean, box: string) => {
+        box === 'question' ? setTextQ(bool) : setTextP(bool);
+    };
+    
     return (
         <div className='w-full h-screen flex justify-center items-center text-black font-roman'>
             <div className='w-full xl:w-4/5 h-3/5 flex flex-row justify-center gap-5 items-center'>

@@ -1,11 +1,16 @@
 'use client'
 
-import { Polls, Prisma } from "@prisma/client"
+import { Polls } from "@prisma/client"
 import { checkPolls, updateVoteClick } from "@/library/utils";
 import { useEffect, useState } from "react";
 
-const PollVotePage = ({ url, pollObj }: { url: string, pollObj: Polls }) => {
-  const [reveal, setReveal] = useState<Boolean>(false);
+interface Props {
+  url: string;
+  pollObj: Polls;
+}
+
+const PollVotePage = ({ url, pollObj }: Props) => {
+  const [reveal, setReveal] = useState<boolean>(false);
   const [likes, setLikes] = useState<number[]>(pollObj.clickCount)
   //Live check of likes
   useEffect(() => {
@@ -17,7 +22,7 @@ const PollVotePage = ({ url, pollObj }: { url: string, pollObj: Polls }) => {
     }
     const timer = setInterval(()=>updateLikes(), 20000);
     return(()=>clearInterval(timer));
-  }, [])
+  }, [url]);
 
   const options = pollObj.options;
   const updateVotes = (index: number) => {

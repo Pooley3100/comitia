@@ -1,20 +1,20 @@
 'use client'
 import NewResponse from "@/components/forms/NewResponse";
 import { getResponsesByUrl, updateViews } from "@/library/utils";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Response } from "@prisma/client";
 import LikeButtons from "./LikeButtons";
 import { orderResponses } from "@/library/clientUtils";
 
 const Answers = ({ url }: { url: string }) => {
-  const [formShow, setFormShow] = useState<Boolean>(false);
+  const [formShow, setFormShow] = useState<boolean>(false);
   const [responses, setResponses] = useState<Response[]>([]);
   const [lastResponseTimestamp, setLastResponseTimestamp] = useState<Date | null>(null);
   useEffect(() => {
     updateViews(url);
-  }, []);
+  }, [url]);
   //Out here so use effect can call and to allow force updates
-  async function fetchResponses() {
+  const fetchResponses = useCallback(async () => {
     try {
       //Uses time stamp to check if responses have been added.
       const fetchedResponses: Response[] = await getResponsesByUrl(url, lastResponseTimestamp);
@@ -31,7 +31,8 @@ const Answers = ({ url }: { url: string }) => {
     } catch (error) {
       console.error("Error fetching responses:", error);
     }
-  }
+  }, [url, lastResponseTimestamp]);
+
   //Called by like button upon click to re order posts by likes
   function updateLikeOrder(responseIndex : number){
     setResponses((prevResponses : Response[]) => {
@@ -47,11 +48,11 @@ const Answers = ({ url }: { url: string }) => {
   useEffect(() => {
     //Update Responses then set timer to check every 10 seconds
     fetchResponses();
-    const timer = setInterval(() => fetchResponses(), 10000);
+    const timer = setInterval(fetchResponses, 20000);
     return () => {
       clearInterval(timer);
     };
-  }, [url, lastResponseTimestamp]);
+  }, [fetchResponses]);
 
   function formSet() {
     setFormShow(!formShow);

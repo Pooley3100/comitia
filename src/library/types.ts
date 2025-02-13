@@ -54,3 +54,5 @@ export const ResponseSchema: ZodType<ResponseData> = z.object
 export type ValidFieldNames = "question" | "details"
 export type ValidResponseFieldName = "name" | "response"
 export type ValidPollFieldNames = "question" | "options"
+
+export type CustomEventHandler = (event: React.MouseEvent<HTMLElement>) => void;

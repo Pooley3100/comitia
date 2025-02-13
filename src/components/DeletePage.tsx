@@ -5,11 +5,12 @@ import { getCookie } from '@/library/clientUtils'
 
 const DeletePage = ({ deleteId }: { deleteId: string | null }) => {
     const [result, setResult]= useState(false);
-    if (deleteId) {
-        React.useEffect(() => {
-          setResult(getCookie(deleteId) ? true : false);
-        }, [deleteId]);
-    }
+    React.useEffect(() => {
+        if (deleteId) {
+            setResult(getCookie(deleteId) ? true : false);
+        }
+      }, [deleteId]);
+    
     return (
         <>
         {result && 

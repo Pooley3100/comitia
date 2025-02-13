@@ -63,7 +63,13 @@ const Poll = ({ update }: { update: (url: string) => void }) => {
             {errors.question && <span className="ml-5 text-black text-sm">{errors.question.message}</span>}
             </div>
             
-            <PollOptions control={control} type='text' register={register} name='options' error={errors.options} />
+            <PollOptions 
+                control={control} 
+                type='text' 
+                register={register} 
+                name='options' 
+                error={errors.options?.[0]} 
+            />
             <div className="flex h-auto items-end w-1/4 rounded-2xl text-black">
                 <button type="submit" className="bg-red-400 w-full rounded-2xl">
                     Create

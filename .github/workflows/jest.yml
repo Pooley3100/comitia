@@ -19,6 +19,20 @@ jobs:
         node-version: '20'
         cache: 'npm'
 
+    - name: Install Chrome
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
+
+    - name: Install Chrome WebDriver
+      run: |
+        CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f 3 | cut -d '.' -f 1)
+        CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+        curl -L -o chromedriver.zip "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
+        unzip chromedriver.zip
+        chmod +x chromedriver
+        sudo mv chromedriver /usr/local/bin/
+
     - name: Install dependencies
       run: npm ci
 
@@ -30,4 +44,6 @@ jobs:
     - name: Run tests
       run: npm test
       env:
-        DATABASE_URL: ${{ secrets.DATABASE_URL }} 
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        SELENIUM_BROWSER: chrome
+        SELENIUM_HEADLESS: true 
